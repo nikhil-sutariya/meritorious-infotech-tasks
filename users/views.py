@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import smart_str, DjangoUnicodeDecodeError, force_bytes
+from django.utils.encoding import force_str, force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -40,12 +40,11 @@ def signup(request):
                     uidb64 = urlsafe_base64_encode(force_bytes(user.id))
                     token = PasswordResetTokenGenerator().make_token(user)
                     current_site = get_current_site(request=request).domain
-                    relative_link = reverse('verify-user', kwargs={'uidb64': uidb64, 'token': token})
+                    relative_link = reverse('verify_user', kwargs={'uidb64': uidb64, 'token': token})
                     absurl = f'http://{current_site}{relative_link}?token={str(token)}'
 
                     context = {
-                        "fname" : user.first_name,
-                        "lname": user.last_name,
+                        "email": email,
                         "url": absurl
                     }
 
@@ -53,7 +52,7 @@ def signup(request):
                     data = {'email_body': email_body, 'to_email': user.email, 'email_subject': 'Reset your password'}
                     Utils.send_email(data)
 
-                    messages.success(request, 'Account created successfully, now login to continue.')
+                    messages.success(request, 'Signup completed and we have sent you a account verification link to verify you account.')
                     return redirect('login')
             else:
                 messages.success(request, 'Password and confirm password must be same.')
@@ -64,12 +63,38 @@ def signup(request):
         print(e)
         return HttpResponse('<html lang="en"><body>Something went wrong please try again leter!</body></html>')
 
+def verify_user(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(id=uid)
+
+        if PasswordResetTokenGenerator().check_token(user, token):
+            user.is_active = True
+            user.is_email_verified = True
+            user.save()
+            messages.success(request, 'Your email has been verified. You can now log in.')
+            return redirect('login')
+        else:
+            messages.error(request, 'The verification link is invalid or has expired.')
+            return redirect('signup')
+        
+    except User.DoesNotExist:
+        messages.error(request, 'User does not exist.')
+        return redirect('signup')
+    except Exception as e:
+        print(e)
+        return HttpResponse('<html lang="en"><body>Something went wrong, please try again later!</body></html>')
+
 def login_view(request):
     try:
         if request.method == 'POST':
             email = request.POST['email']
             password = request.POST['password']
             user = authenticate(email=email, password=password)
+
+            if not user.is_email_verified:
+                messages.error(request, 'Please verify your account first')
+                return redirect('login')
 
             if user is not None:
                 login(request, user)
