@@ -1,0 +1,86 @@
+*{
+	box-sizing: border-box;
+	margin: 0px;
+	padding: 0px;
+}
+
+.container, .container-fluid{
+	padding: 0px !important;
+}
+
+body {
+    font: 20px Montserrat, sans-serif !important;
+    background-color: #f5f6f7 !important;
+}
+
+.navbar{
+	box-shadow: -1px 3px 6px rgba(0,0,0,0.12) !important;
+	height: 80px;
+}
+
+.navbar .navbar-brand{
+	width: 20%;
+}
+
+.navbar img{
+	width: 50%;
+}
+
+.navbar-nav{
+	margin-right: 50px;
+	font-size: 14px;
+	letter-spacing: 1.5px;
+	margin-top: 10px;
+}
+
+#nav-icon{
+	margin: 0px 10px 0px 10px;
+}
+
+.login-form-container {
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	padding: 30px 50px;
+	width: 30rem;
+}
+
+.login-form-container .login-form label {
+	font-size: 18px;
+	display: block;
+	margin: 10px 0;
+}
+
+.login-form-container .login-form label:nth-child(1) {
+	margin-top: 20px;
+}
+
+input[type='text'], input[type='email'], input[type='number'], input[type='password'] {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: transparent !important;
+	font-size: 16px;
+	padding: 10px 20px;
+	width: 100%;
+}
+
+.alert {
+	font-size: 16px !important;
+}
+
+.vh-75 {
+	height: 75vh;
+}
+
+.btn {
+	font-size: 14px !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}

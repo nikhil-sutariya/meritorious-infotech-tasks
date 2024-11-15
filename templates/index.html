@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="me-4"><p>Hello <b>{{ user.email }}</b></p></div>
+    <p>Thank you for using django auth app.</p>
+    <p>You can changes your profile details from here.</p>
+    <a href="{% url 'profile' %}">
+        <button class="btn btn-primary mt-3">Change your details</button>
+    </a>
+
+{% endif %}
+{% endblock %}

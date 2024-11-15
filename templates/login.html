@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+{% for message in messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+<div class="my-4 d-flex justify-content-center align-items-center vh-75">
+    <div class="login-form-container">
+        <h2 class="mb-5 text-center">Log In</h2>
+        <div class="my-3">
+            <form method="post" class="login-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" name="email" id="email" class="form-control mt-2" placeholder="Enter your email"
+                        required>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control mt-2"
+                        placeholder="Enter your password" required>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <p class="me-3">Are you new user?</p>
+                    <span>
+                        <a href="{% url 'signup' %}">
+                            Sign up
+                        </a>
+                    </span>
+                </div>
+                <button class="btn btn-primary mt-3 float-end" type="submit">Log In</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

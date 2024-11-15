@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Admin panel{% endblock %}
+
+{% block content %}
+{% for message in messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+<div class="d-flex justify-content-center align-items-center vh-75">
+    <div class="text-center">
+        <p>Hello <b>{{ user.email }}</b></p><br />
+        {% if user.is_authenticated and not user.is_superuser %}
+            <p>You don't have access to view this page</p>
+            <a href="/">
+                <button class="btn btn-primary mt-3">Back to home</button>
+            </a>
+
+        {% else %}
+            <p>You have access to view this page</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
