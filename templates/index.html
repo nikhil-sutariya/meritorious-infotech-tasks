@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between">
+    <h4>Latest posts</h4>
+    {% if user.is_authenticated %}
+        <div class="me-4"><p>Hello <b>{{ user.username }}</b></p></div>
+    {% endif %}
+</div>
+<div class="posts">
+    {% for post in posts %}
+    <div class="card">
+        <div class="post-card-header">
+            <div class="d-flex w-100 my-3">
+                <p class="title">#{{ forloop.counter }} - {{ post.title }}</p>
+                <div class="ms-auto">
+                    {% if user.is_authenticated and post.author == request.user %}
+                        <a href="{% url 'post_update' post.id %}" class='post-links'>Edit post</a>
+                        <a href="{% url 'post_delete' post.id %}" class='post-links ms-2'>Delete post</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <p class="content">{{ post.content|truncatechars:200 }}</p>
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'post_detail' post.id %}" class='post-links'>Read more</a>
+            <div>
+                <p class="post-date mb-1">Author - <strong>{{ post.author.username }}</strong></p>
+                <p class="post-date">Posted on - <strong>{{ post.created_at }}</strong></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
